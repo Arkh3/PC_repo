@@ -1,1 +1,1 @@
-Autores: Hong Xian Chen y Andrés Teruel Fernández
+Autores: Hong Xiang Chen y Andrés Teruel Fernández
