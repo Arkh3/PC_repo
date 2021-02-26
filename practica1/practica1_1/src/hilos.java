@@ -5,7 +5,7 @@ public class Hilos extends Thread{
 	int id;
 	int restTime;
 	
-	Hilos (int identificador, int t){
+	public Hilos (int identificador, int t){
 		
 		this.id = identificador;
 		this.restTime = t;
