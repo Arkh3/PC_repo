@@ -10,7 +10,7 @@ public class Main {
 		Entero n = new Entero();
 		n.valor = 0;
 		
-		LockRompeEmpate lock = new LockRompeEmpate(M*2);
+		LockTicket lock = new LockTicket(M*2); //aqui ponemos el lock que queramos usar
 		
 		System.out.println("Empieza la creación de los hilos");
 		

@@ -6,9 +6,9 @@ public class Modificador extends Thread{
 	private boolean tipo; //true decrementa, false aumenta
 	private int N;
 	private Entero n;
-	private LockRompeEmpate lock;
+	private LockTicket lock;
 	
-	public Modificador(int id, boolean tipo, int N, Entero n, LockRompeEmpate lock) {
+	public Modificador(int id, boolean tipo, int N, Entero n, LockTicket lock) {
 		this.id = id;
 		this.tipo = tipo;	
 		this.N = N;
@@ -29,7 +29,7 @@ public class Modificador extends Thread{
 			
 			n.valor += aux; // sección crítica
 			
-			lock.releaseLock(id);
+			lock.releaseLock();
 		}
 		
 		System.out.println("Soy el hilo:" + id + ". El valor de n es: " + n.valor);
