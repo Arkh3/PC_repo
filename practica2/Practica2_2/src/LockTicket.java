@@ -20,10 +20,10 @@ public class LockTicket {
 
 		turn[id] = number.addAndGet(1);
 		
-		while(turn[id] != next); //esto esta bn
+		while(turn[id] != next);
 	}
 	
-	public void releaseLock() {//esto esta bien creo
+	public void releaseLock() {
 		
 		next = next + 1;
 	}
