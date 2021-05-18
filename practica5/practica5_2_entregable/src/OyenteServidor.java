@@ -4,14 +4,14 @@ import java.net.Socket;
 public class OyenteServidor extends Thread{
 	
 	private Socket socket;
-	private static ObjectOutputStream out;
-	private static ObjectInputStream in;
+	private ObjectOutputStream out;
+	private ObjectInputStream in;
 	
-	public OyenteServidor(Socket socket) throws IOException {
+	public OyenteServidor(Socket socket, ObjectOutputStream out, ObjectInputStream in) throws IOException {
 		
 		this.socket = socket;
-		out = new ObjectOutputStream(socket.getOutputStream());
-		in = new ObjectInputStream(socket.getInputStream());
+		this.in  = in;
+		this.out  = out;
 	}
 	
 	public void run() {
@@ -49,8 +49,7 @@ public class OyenteServidor extends Thread{
 		
 		case 1:
 			
-			/*- MENSAJE_CONFIRMACION_CONEXION:
-		    imprimir conexion establecida por standard output*/
+			/*- MENSAJE_CONFIRMACION_CONEXION:*/
 			
 			System.out.println(m.getDestino() + ": conexión establecida");
 			

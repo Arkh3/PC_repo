@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.List;
 
-public class Usuario {
+public class Usuario implements Serializable{
 	
 	private String id;
 	private InetAddress dir_ip;

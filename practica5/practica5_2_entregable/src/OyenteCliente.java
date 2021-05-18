@@ -41,7 +41,7 @@ public class OyenteCliente extends Thread{
 		try {
 			m = (Mensaje) in.readObject();
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("no lee el mensaje" + m);
 			e.printStackTrace();
 		}
 		

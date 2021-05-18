@@ -19,7 +19,7 @@ public class Cliente {
 		preguntarNombreYFicheros();
 
 		crearSocketConServidor();
-		
+	
 		crearOyenteServidor();
 		
 		enviarConexion();
@@ -37,15 +37,15 @@ public class Cliente {
         String n = teclado.nextLine();
         int numero = Integer.parseInt(n);
 
-        System.out.print("Introduce tus fichero: ");
+        System.out.println("Introduce tus fichero: ");
         List<String> ficheros = new ArrayList<String>();
 
-        while (numero > 0) {
-
+        
+        for(int i = 0; i< numero; ++i) {
+        	
+        	System.out.print("("+i+") ");
             String fichero = teclado.nextLine();
             ficheros.add(fichero);
-
-            numero--;
         }
 
         teclado.close();
@@ -65,16 +65,16 @@ public class Cliente {
 	
 	private static void crearOyenteServidor() throws IOException {
 		
-		OyenteServidor oyente = new OyenteServidor(socket); // TODO pasarle los atributos necesarios
-		
+		OyenteServidor oyente = new OyenteServidor(socket,out,in); // TODO pasarle los atributos necesarios
 		oyente.start();
+
 	}
 	
 	private static void enviarConexion() throws IOException {
 		
-		MensajeConexion m = new MensajeConexion(usuario.getId(), "Servidor", usuario);
+		System.out.println("Enviando el mensaje Conexion"); 
 		
-		out.writeObject(m);
+		out.writeObject(new MensajeConexion(usuario.getId(), "Servidor", usuario));
 	}
 	
 	private static void menuPrincipal() {

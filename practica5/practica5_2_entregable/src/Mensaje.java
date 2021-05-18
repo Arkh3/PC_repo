@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public abstract class Mensaje {
+public abstract class Mensaje implements Serializable{
 	
 	private int tipo;
 	private String origen;
