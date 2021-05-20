@@ -97,14 +97,15 @@ public class OyenteCliente extends Thread{
 			* envio mensaje confirmacion lista usuarios fout*/
 		
 			ConcurrentHashMap<String, List<String>> aux = getInformacionUsuarios();
-			
-			System.out.println("2 " + aux.toString());
-			
+
 			MensajeConfirmarInformacionUsuarios msg = new MensajeConfirmarInformacionUsuarios("Servidor", m.getOrigen(), aux);
 			
-			System.out.println("3 " + msg.getInformacion().toString());
+			System.out.println("1 " + msg.getInformacion().toString());
 					
 			out.writeObject(msg);
+			
+			out.reset();
+			
 			break;
 			
 
@@ -140,8 +141,6 @@ public class OyenteCliente extends Thread{
 	public ConcurrentHashMap<String, List<String>> getInformacionUsuarios() {
 		
 		ConcurrentHashMap<String, List<String>> ret = informacion;
-		
-		System.out.println("1 " + ret.toString());
 		 
 		 return ret;
 	}

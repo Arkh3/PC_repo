@@ -38,18 +38,18 @@ public class OyenteServidor extends Thread{
 	
 	public Mensaje leerMensaje() {
 		
-		Mensaje m = null;
+		Object m = null;
 		
 		try {
-			m = (Mensaje) in.readObject();
-			
-			
+			m = in.readObject();
 			
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
 		}
 		
-		return m;
+		Mensaje ret = (Mensaje) m;
+		
+		return ret;
 	}
 	
 	

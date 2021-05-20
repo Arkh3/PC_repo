@@ -5,34 +5,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Cliente {
+public class Cliente extends Thread{
 	
-	private static int PORT = 1234;
-	private static InetAddress HOST;
-	private static ObjectOutputStream out;
-	private static ObjectInputStream in;
-	private static Socket socket;
-	private static Usuario usuario = new Usuario();
-	private static Scanner teclado;
+	private  int PORT = 1234;
+	private  InetAddress HOST;
+	private  ObjectOutputStream out;
+	private  ObjectInputStream in;
+	private  Socket socket;
+	private  Usuario usuario = new Usuario();
+	private  Scanner teclado;
 	
-	public static void main(String[] args) throws IOException {
+	public Cliente() {
+		
+	}
+	
+	public void run() {
 		
 		teclado = new Scanner(System.in);
 		
 		preguntarNombreYFicheros();
 
-		crearSocketConServidor();
-	
-		crearOyenteServidor();
+		try {
+			
+			crearSocketConServidor();
 		
-		enviarConexion();
+			crearOyenteServidor();
+			
+			enviarConexion();
+			
+			while(menuPrincipal());
 		
-		while(menuPrincipal());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
         teclado.close();
     }
 	
-	private static void preguntarNombreYFicheros() {
+	private void preguntarNombreYFicheros() {
 		
 		System.out.print("- Nombre de Usuario: ");
 		usuario.setId(teclado.nextLine());
@@ -54,7 +65,7 @@ public class Cliente {
 		usuario.setInformacionCompartida(ficheros);
 	}
 	
-	private static void crearSocketConServidor() throws IOException {
+	private void crearSocketConServidor() throws IOException {
 		
 		HOST = InetAddress.getLocalHost();
 
@@ -64,21 +75,21 @@ public class Cliente {
 		in = new ObjectInputStream(socket.getInputStream());
 	}
 	
-	private static void crearOyenteServidor() throws IOException {
+	private void crearOyenteServidor() throws IOException {
 		
 		OyenteServidor oyente = new OyenteServidor(socket,out,in); // TODO pasarle los atributos necesarios
 		oyente.start();
 
 	}
 	
-	private static void enviarConexion() throws IOException {
+	private void enviarConexion() throws IOException {
 		
 		out.writeObject(new MensajeConexion(usuario.getId(), "Servidor", usuario));
 		
 		//TODO es
 	}
 	
-	private static boolean menuPrincipal() throws IOException {
+	private boolean menuPrincipal() throws IOException {
 		
 		// TODO abrir un menú con 3 opciones: 1. consultar lista de usuarios 2. pedir ficher 3. salir
 		boolean ret = true;
@@ -86,6 +97,7 @@ public class Cliente {
 		System.out.println("\n\nMENÚ PRINCIPAL.\n\n (1) Lista de usuarios.\n (2) Pedir fichero. \n (0) Salir.");
 
         System.out.print("- Introduce la opción: ");
+        
         int opcion = Integer.parseInt(teclado.nextLine());
         
         while(opcion < 0 || opcion > 2) {
