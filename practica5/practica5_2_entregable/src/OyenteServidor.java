@@ -1,5 +1,8 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OyenteServidor extends Thread{
 	
@@ -14,6 +17,7 @@ public class OyenteServidor extends Thread{
 		this.out  = out;
 	}
 	
+	
 	public void run() {
 		
 		Mensaje m;
@@ -22,9 +26,15 @@ public class OyenteServidor extends Thread{
 			
 			m = leerMensaje();
 			
-			procesarMensaje(m);
+			try {
+				procesarMensaje(m);
+			} catch (IOException e) {
+
+				e.printStackTrace();
+			}
 		}
 	}
+	
 	
 	public Mensaje leerMensaje() {
 		
@@ -32,8 +42,10 @@ public class OyenteServidor extends Thread{
 		
 		try {
 			m = (Mensaje) in.readObject();
+			
+			
+			
 		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -42,8 +54,7 @@ public class OyenteServidor extends Thread{
 	
 	
 	// TODO hacer toda la parte de procesar mensaje 
-	private void procesarMensaje(Mensaje m) {
-		
+	private void procesarMensaje(Mensaje m) throws IOException {
 		
 		switch(m.getTipo()) {
 		
@@ -55,16 +66,20 @@ public class OyenteServidor extends Thread{
 			
 			break;
 	
-		case 9:
+		case 5:
 			
 		    /*- MENSAJE_CONFIRMACION_LISTA_USUARIOS
 	        imprimir lista usuarios por standard output*/	
 			
+			MensajeConfirmarInformacionUsuarios mensaje = (MensajeConfirmarInformacionUsuarios) m;
 			
+			System.out.println(mensaje.getInformacion().toString());
+			
+			//imprimirInformacionUsuarios(mensaje.getInformacion());
 			
 			break;
 			
-		case 2:
+		case 45:
 			
 			/*- MENSAJE_EMITIR_FICHERO
 			(nos llega nombre de cliente C1 e informacion pedida 3)
@@ -75,7 +90,7 @@ public class OyenteServidor extends Thread{
 			
 			break;
 			
-		case 3:
+		case 65:
 			
 			/*- MENSAJE_PREPARADO_SERVIDORCLIENTE
 			(llega direccion Ip y puerto del propietario de fichero)
@@ -85,16 +100,36 @@ public class OyenteServidor extends Thread{
 			
 			break;
 			
-		case 4:
+		case 3:
 
 			   /*- MENSAJE_CONFIRMACION_CERRAR_CONEXION
 			   imprimir adios por standard output*/
+			
+			System.out.println("Adios!");
+			socket.close();
+			System.exit(1);
 			
 			break;
 			
 		default:
 			
-			System.out.println("Oyente de servidor: Mensaje no valido (0 - 4). " + m.getTipo());
+			System.out.println("Oyente de servidor: Mensaje no valido (0 - ). " + m.getTipo());
 		}
 	}
+
+	
+	private void imprimirInformacionUsuarios(ConcurrentHashMap<String, List<String>> informacion) {
+
+        System.out.println("Información usuarios:");
+
+        for (String key : informacion.keySet()) {
+            List<String> item = informacion.get(key);
+            System.out.println(key + ":");
+            for (String s : item) {
+                System.out.println('\t'+s);
+
+            }
+            System.out.println();
+        }
+    }
 }

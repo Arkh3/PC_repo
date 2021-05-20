@@ -13,8 +13,11 @@ public class Cliente {
 	private static ObjectInputStream in;
 	private static Socket socket;
 	private static Usuario usuario = new Usuario();
+	private static Scanner teclado;
 	
 	public static void main(String[] args) throws IOException {
+		
+		teclado = new Scanner(System.in);
 		
 		preguntarNombreYFicheros();
 
@@ -24,13 +27,14 @@ public class Cliente {
 		
 		enviarConexion();
 		
-		menuPrincipal();
+		while(menuPrincipal());
+		
+        teclado.close();
     }
 	
 	private static void preguntarNombreYFicheros() {
-			
+		
 		System.out.print("- Nombre de Usuario: ");
-		Scanner teclado = new Scanner(System.in);
 		usuario.setId(teclado.nextLine());
 		
         System.out.print("- Introduce el numero de ficheros: ");
@@ -40,15 +44,12 @@ public class Cliente {
         System.out.println("Introduce tus fichero: ");
         List<String> ficheros = new ArrayList<String>();
 
-        
         for(int i = 0; i< numero; ++i) {
         	
-        	System.out.print("("+i+") ");
+        	System.out.print("("+(i+1)+") ");
             String fichero = teclado.nextLine();
             ficheros.add(fichero);
         }
-
-        teclado.close();
 		
 		usuario.setInformacionCompartida(ficheros);
 	}
@@ -72,13 +73,58 @@ public class Cliente {
 	
 	private static void enviarConexion() throws IOException {
 		
-		System.out.println("Enviando el mensaje Conexion"); 
-		
 		out.writeObject(new MensajeConexion(usuario.getId(), "Servidor", usuario));
+		
+		//TODO es
 	}
 	
-	private static void menuPrincipal() {
+	private static boolean menuPrincipal() throws IOException {
 		
 		// TODO abrir un menú con 3 opciones: 1. consultar lista de usuarios 2. pedir ficher 3. salir
+		boolean ret = true;
+	     
+		System.out.println("\n\nMENÚ PRINCIPAL.\n\n (1) Lista de usuarios.\n (2) Pedir fichero. \n (0) Salir.");
+
+        System.out.print("- Introduce la opción: ");
+        int opcion = Integer.parseInt(teclado.nextLine());
+        
+        while(opcion < 0 || opcion > 2) {
+        	
+        	System.out.println("Opción incorrecta (0 - 2)");
+            System.out.print("- Introduce la opción: ");
+            opcion = Integer.parseInt(teclado.nextLine());
+        }
+        
+        switch(opcion) {
+        
+        case 1:
+        	
+        	System.out.println("Pidiendo lista de usuarios.");
+        	out.writeObject(new MensajeListaUsuarios(usuario.getId(), "Servidor"));
+        	
+        	//TODO esperara que se reciba la lista de usuarios (y no se imprima a la vez que el menú)
+        	
+        	
+        	break;
+        	
+        case 2:
+        	
+        	// pedir el usuario y el fichero y mandar el mensaje
+        	
+        	break;
+        	
+        case 0:
+        	
+        	System.out.println("Saliendo...");
+        	out.writeObject(new MensajeCerrarConexion(usuario.getId(), "Servidor"));
+
+        	ret = false;
+        	break;
+        
+        default:
+        	System.out.println("Opción incorrecta (0 - 2) - no deberia llegar aqui -");
+        }
+        
+		return ret;
 	}
 }
